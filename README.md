@@ -67,38 +67,38 @@ Decomposing `rawflights` into two tables eliminates transitive dependencies and 
 
 ## 5. Independent AI Prompt (Part 4 – `FlightViewer.java`)
 
-    ```text
-        Write a complete Java class named FlightViewer with a main method.
-        
-        Ask for the database password using Scanner and connect to MySQL FlightDB using URL: "jdbc:mysql://localhost:3306/FlightDB?allowLoadLocalInfile=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Jerusalem&useSSL=false" and user "root".
-        
-        Always use try-with-resources for Connection, PreparedStatement, and ResultSet.
-        
-        In main(), use the same Scanner to prompt the user for a target Terminal number (valid terminals in dataset: 2, 3, 4, 5).
-        
-        Execute a SELECT query using a single PreparedStatement with an INNER JOIN between Arrivals and FlightRoutes on their shared flight column, filtering WHERE Arrivals.terminal = ? and sorting ORDER BY Arrivals.scheduled ASC.
-        
-        CRITICAL: Bind the user's terminal input as a String using pstmt.setString(1, terminal) (because Arrivals.terminal is VARCHAR(10))—do not use setInt.
-        
-        Iterate through the ResultSet and print all matching flight records in a clean, formatted table showing scheduled time, flight number, origin city (fromC), delay status, and terminal. If no flights are found for that terminal, print a clear message indicating no records matched.
-    ```
+```text
+    Write a complete Java class named FlightViewer with a main method.
+    
+    Ask for the database password using Scanner and connect to MySQL FlightDB using URL: "jdbc:mysql://localhost:3306/FlightDB?allowLoadLocalInfile=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Jerusalem&useSSL=false" and user "root".
+    
+    Always use try-with-resources for Connection, PreparedStatement, and ResultSet.
+    
+    In main(), use the same Scanner to prompt the user for a target Terminal number (valid terminals in dataset: 2, 3, 4, 5).
+    
+    Execute a SELECT query using a single PreparedStatement with an INNER JOIN between Arrivals and FlightRoutes on their shared flight column, filtering WHERE Arrivals.terminal = ? and sorting ORDER BY Arrivals.scheduled ASC.
+    
+    CRITICAL: Bind the user's terminal input as a String using pstmt.setString(1, terminal) (because Arrivals.terminal is VARCHAR(10))—do not use setInt.
+    
+    Iterate through the ResultSet and print all matching flight records in a clean, formatted table showing scheduled time, flight number, origin city (fromC), delay status, and terminal. If no flights are found for that terminal, print a clear message indicating no records matched.
+```
 ## 6. Entity Relationship Diagram (ERD)
 
-    ```mermaid
-    erDiagram
-        FlightRoutes ||--o{ Arrivals : "has landings"
-        FlightRoutes {
-            varchar(50) flight_number PK
-            varchar(100) from_city
-        }
-        Arrivals {
-            int id PK
-            varchar(50) flight_number FK
-            varchar(50) scheduled
-            varchar(50) delay_status
-            varchar(10) terminal
-        }
-    ```
+```mermaid
+erDiagram
+    FlightRoutes ||--o{ Arrivals : "has landings"
+    FlightRoutes {
+        varchar(50) flight_number PK
+        varchar(100) from_city
+    }
+    Arrivals {
+        int id PK
+        varchar(50) flight_number FK
+        varchar(50) scheduled
+        varchar(50) delay_status
+        varchar(10) terminal
+    }
+```
 ---
 
 ## 7. Security Audit Summary (Part 5 – SQL Injection Mitigation)
